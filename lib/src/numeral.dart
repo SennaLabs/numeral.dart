@@ -1,3 +1,5 @@
+import 'dart:math' show pow;
+
 import 'package:intl/intl.dart';
 
 import 'constants.dart';
@@ -37,7 +39,8 @@ class Numeral {
       {int fractionDigits = DEFAULT_FRACTION_DIGITS, bool roundUp = false}) {
     final NumeralParsedValue parsed = numeralParser(numeral);
     if (!roundUp) {
-      return _removeEndsZero(getNumber(parsed.value, precision: 2).toString()) +
+      return _removeEndsZero(
+              truncateToDecimalPlaces(parsed.value, precision: 2).toString()) +
           parsed.suffix;
     } else {
       return _removeEndsZero(parsed.value.toStringAsFixed(fractionDigits)) +
@@ -45,8 +48,8 @@ class Numeral {
     }
   }
 
-  double getNumber(num input, {required int precision}) => double.parse(
-      '$input'.substring(0, '$input'.indexOf('.') + precision + 1));
+  double truncateToDecimalPlaces(num value, {required int precision}) =>
+      (value * pow(10, precision)).truncate() / pow(10, precision);
 
   /// Remove value ends with zero.
   ///
