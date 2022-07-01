@@ -1,3 +1,5 @@
+import 'package:intl/intl.dart';
+
 import 'constants.dart';
 import 'parser.dart';
 
@@ -34,7 +36,7 @@ class Numeral {
   String format({int fractionDigits = DEFAULT_FRACTION_DIGITS}) {
     final NumeralParsedValue parsed = numeralParser(numeral);
 
-    return _removeEndsZero(parsed.value.toStringAsFixed(fractionDigits)) +
+    return _removeEndsZero(NumberFormat("###.##").format(parsed.value)) +
         parsed.suffix;
   }
 
