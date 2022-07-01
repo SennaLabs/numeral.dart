@@ -33,12 +33,20 @@ class Numeral {
   /// ```
   ///
   /// return a [String] type.
-  String format({int fractionDigits = DEFAULT_FRACTION_DIGITS}) {
+  String format(
+      {int fractionDigits = DEFAULT_FRACTION_DIGITS, bool roundUp = false}) {
     final NumeralParsedValue parsed = numeralParser(numeral);
-
-    return _removeEndsZero(NumberFormat("###.##").format(parsed.value)) +
-        parsed.suffix;
+    if (!roundUp) {
+      return _removeEndsZero(getNumber(parsed.value, precision: 2).toString()) +
+          parsed.suffix;
+    } else {
+      return _removeEndsZero(parsed.value.toStringAsFixed(fractionDigits)) +
+          parsed.suffix;
+    }
   }
+
+  double getNumber(num input, {required int precision}) => double.parse(
+      '$input'.substring(0, '$input'.indexOf('.') + precision + 1));
 
   /// Remove value ends with zero.
   ///
